@@ -21,3 +21,9 @@ def add(request):
             description = request.POST["description"]
         )
     return render(request, "tasks/add.html")
+
+def delete(request, task_id):
+    task = Task.objects.get(id=task_id)
+    task.delete()
+
+    return HttpResponseRedirect(reverse("tasks:index"))

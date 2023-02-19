@@ -5,6 +5,8 @@
     <ul>
         {% for task in tasks %}
             <li>{{ task }}</li>
+            <p>{{ task.description }}</p>
+            <a href="{{task.id}}/delete">Delete task</a>
         {% endfor %}
     </ul>
 
