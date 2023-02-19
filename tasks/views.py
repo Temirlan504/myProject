@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Task
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .forms import NewTaskForm
 
 def index(request):
     if not request.user.is_authenticated:
@@ -15,12 +16,21 @@ def index(request):
 
 def add(request):
     if request.method == "POST":
-        Task.objects.create(
-            user_id = request.user.id,
-            title = request.POST["title"],
-            description = request.POST["description"]
-        )
-    return render(request, "tasks/add.html")
+        form = NewTaskForm(request.POST)
+        if form.is_valid():
+            Task.objects.create(
+                user_id = request.user.id,
+                title = form.cleaned_data['title'],
+                description = form.cleaned_data['description']
+            )
+            form = NewTaskForm()
+
+    else:
+        form = NewTaskForm()
+
+    return render(request, "tasks/add.html", {
+        "form": form
+    })
 
 def delete(request, task_id):
     task = Task.objects.get(id=task_id)
