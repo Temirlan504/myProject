@@ -7,6 +7,8 @@
             <li>{{ task }}</li>
             <p>{{ task.description }}</p>
             <a href="{{task.id}}/delete">Delete task</a>
+            <a href="{% url 'tasks:update' pk=task.pk %}">Edit task</a>
+
         {% endfor %}
     </ul>
 

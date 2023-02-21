@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Task
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .forms import NewTaskForm
+from django.views.generic.edit import UpdateView
 
 def index(request):
     if not request.user.is_authenticated:
@@ -37,3 +38,9 @@ def delete(request, task_id):
     task.delete()
 
     return HttpResponseRedirect(reverse("tasks:index"))
+
+class UpdateTaskView(UpdateView):
+    model = Task
+    fields = ["title", "description"]
+    template_name = 'tasks/update.html'
+    success_url = reverse_lazy("tasks:index")
